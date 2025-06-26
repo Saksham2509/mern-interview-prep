@@ -1,10 +1,17 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import LandingPage from './pages/LandingPage';
+import Dashboard from './pages/Dashboard';
 
 const App = () => {
   return (
-    <div className="bg-blue-500 text-white p-4 text-xl">
-      Tailwind is working 🎯
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
   );
 };
 
