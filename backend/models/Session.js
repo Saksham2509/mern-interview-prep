@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const sessionSchema = new mongoose.Schema(
   {
-    userId: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
@@ -15,8 +15,16 @@ const sessionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    questions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Question',
+      },
+    ],
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 const Session = mongoose.model('Session', sessionSchema);
