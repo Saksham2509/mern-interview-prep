@@ -80,5 +80,5 @@ export const loginUser = async (req, res) => {
 
 // 👉 GET PROFILE (for now just placeholder)
 export const getMe = (req, res) => {
-  res.send("Profile info route hit ✅");
+  res.json(req.user); // ✅ this user is added by middleware
 };
