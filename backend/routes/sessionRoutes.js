@@ -1,10 +1,18 @@
 import express from 'express';
-import { createSession } from '../controllers/sessionController.js';
+import {
+  createSession,
+  getAllSessions,
+  getSessionById,
+  deleteSession
+} from '../controllers/sessionController.js';
+
 import protect from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// 🔐 Create new session
-router.post('/', protect, createSession);
+router.post('/', protect, createSession);         // Create
+router.get('/', protect, getAllSessions);         // Get all
+router.get('/:id', protect, getSessionById);      // Get one
+router.delete('/:id', protect, deleteSession);    // Delete one
 
 export default router;
