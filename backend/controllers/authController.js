@@ -43,9 +43,40 @@ export const signupUser = async (req, res) => {
 };
 
 // 👉 LOGIN (for now just placeholder)
-export const loginUser = (req, res) => {
-  res.send("Login route hit ✅");
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // generate token
+    const token = jwt.sign({ id: user._id }, 'secretKey', {
+      expiresIn: '7d',
+    });
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      image: user.image,
+      token,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
+
 
 // 👉 GET PROFILE (for now just placeholder)
 export const getMe = (req, res) => {
