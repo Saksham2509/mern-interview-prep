@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import connectDB from './db.js'; // <-- ✅ import here
 import authRoutes from './routes/authRoutes.js';
 import sessionRoutes from './routes/sessionRoutes.js';
+import questionRoutes from './routes/questionRoutes.js';
 
 dotenv.config();     // ✅ read .env file
 connectDB();         // ✅ connect to MongoDB
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes); // ✅ Mount all auth routes
 app.use('/api/sessions', sessionRoutes);
+app.use('/api/questions', questionRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');

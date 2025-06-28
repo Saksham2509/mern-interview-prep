@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const questionSchema = new mongoose.Schema(
   {
-    sessionId: {
+    session: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Session',
       required: true,
