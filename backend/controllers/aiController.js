@@ -1,10 +1,12 @@
-import { GoogleGenAI } from "@google/genai";
-import { questionAnswerPrompt, conceptExplainPrompt } from "../utils/prompt.js";
-import dotenv from "dotenv";
-dotenv.config();
+const { GoogleGenAI } = require("@google/genai");
+const {
+  conceptExplainPrompt,
+  questionAnswerPrompt,
+} = require("../utils/prompts");
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
+// Utility to extract text from Gemini response
 function getGeminiText(response) {
   if (
     response &&
@@ -19,7 +21,8 @@ function getGeminiText(response) {
   return null;
 }
 
-const tryParseJSON = (text) => {
+// Try parsing JSON, even if Gemini returns markdown-wrapped JSON
+function tryParseJSON(text) {
   try {
     return { json: JSON.parse(text), error: null };
   } catch (err) {
@@ -33,9 +36,12 @@ const tryParseJSON = (text) => {
       return { json: null, error: err2.message };
     }
   }
-};
+}
 
-export const generateInterviewQuestions = async (req, res) => {
+// @desc    Generate interview questions and answers using Gemini
+// @route   POST /api/ai/generate-questions
+// @access  Private
+const generateInterviewQuestions = async (req, res) => {
   try {
     const { role, experience, topicsToFocus, numberOfQuestions } = req.body;
 
@@ -67,16 +73,23 @@ export const generateInterviewQuestions = async (req, res) => {
         error,
       });
   } catch (error) {
-    res.status(500).json({ message: "Failed to generate questions", error: error.message });
+    res.status(500).json({
+      message: "Failed to generate questions",
+      error: error.message,
+    });
   }
 };
 
-export const generateConceptExplanation = async (req, res) => {
+// @desc    Generate explains a interview question
+// @route   POST /api/ai/generate-explanation
+// @access  Private
+const generateConceptExplanation = async (req, res) => {
   try {
     const { question } = req.body;
 
-    if (!question)
+    if (!question) {
       return res.status(400).json({ message: "Missing required fields" });
+    }
 
     const prompt = conceptExplainPrompt(question);
 
@@ -97,6 +110,14 @@ export const generateConceptExplanation = async (req, res) => {
         error,
       });
   } catch (error) {
-    res.status(500).json({ message: "Failed to generate explanation", error: error.message });
+    res.status(500).json({
+      message: "Failed to generate explanation",
+      error: error.message,
+    });
   }
+};
+
+module.exports = {
+  generateInterviewQuestions,
+  generateConceptExplanation,
 };
