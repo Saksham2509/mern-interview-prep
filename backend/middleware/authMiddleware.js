@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
+// 🔐 Middleware to protect routes using JWT
 const protect = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -11,9 +12,9 @@ const protect = async (req, res, next) => {
 
     const token = authHeader.split(' ')[1];
 
-    const decoded = jwt.verify(token, 'secretKey'); // make sure to match this with signup/login
-
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // ✅ secure, uses .env
     const user = await User.findById(decoded.id).select('-password');
+
     if (!user) {
       return res.status(401).json({ message: 'User not found' });
     }
@@ -21,8 +22,8 @@ const protect = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.error(error.message);
-    return res.status(401).json({ message: 'Invalid token' });
+    console.error('Auth Middleware Error:', error.message);
+    return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };
 
