@@ -15,6 +15,13 @@ const sessionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    topicsToFocus: {
+      type: [String], // Better as array if multiple topics
+      default: [],
+    },
+    description: {
+      type: String,
+    },
     questions: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -22,9 +29,7 @@ const sessionSchema = new mongoose.Schema(
       },
     ],
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 const Session = mongoose.model('Session', sessionSchema);

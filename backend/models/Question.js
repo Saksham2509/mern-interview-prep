@@ -15,12 +15,18 @@ const questionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    note: {
+      type: String,
+      default: '',
+    },
     isPinned: {
       type: Boolean,
       default: false,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 const Question = mongoose.model('Question', questionSchema);
