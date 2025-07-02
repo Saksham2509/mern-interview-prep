@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import axiosInstance from "../../utils/axiosInstance";
+import axiosInstance from "../../utils/axios";
 import { API_PATHS } from "../../utils/apiPaths";
 import { UserContext } from "../../context/userContext";
 

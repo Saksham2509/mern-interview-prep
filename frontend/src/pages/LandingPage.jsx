@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import Hero from '../components/Hero';
-import LoginModal from '../components/LoginModal';
-import SignupModal from '../components/SignupModal';
+
+import Login from "./Auth/login";
+import SignUp from "./Auth/SignUp";
+
 
 const LandingPage = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -11,7 +13,7 @@ const LandingPage = () => {
     <>
       <Hero onLoginClick={() => setShowLogin(true)} />
 
-      <LoginModal
+      <Login
   isOpen={showLogin}
   onClose={() => setShowLogin(false)}
   onSwitchToSignup={() => {
@@ -20,7 +22,7 @@ const LandingPage = () => {
   }}
 />
 
-<SignupModal
+<SignUp
   isOpen={showSignup}
   onClose={() => setShowSignup(false)}
   onSwitchToLogin={() => {
