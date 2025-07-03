@@ -40,10 +40,12 @@ export const signupUser = async (req, res) => {
       profileImageUrl: newUser.profileImageUrl,
       token,
     });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: 'Server error' });
-  }
+  } 
+  catch (error) {
+  console.error("🔴 Registration error:", error); // 👈 log the full error object
+  res.status(500).json({ message: error.message || "Server error" });
+}
+
 };
 
 // 👉 LOGIN
