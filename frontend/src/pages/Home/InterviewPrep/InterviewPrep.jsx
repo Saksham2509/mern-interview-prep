@@ -188,13 +188,17 @@ const InterviewPage = () => {
                 });
                 const newQuestions = aiRes.data.questions;
                 // Save new question to session
-                await axiosInstance.post(API_PATHS.QUESTION.ADD_TO_SESSION, {
+                const saveRes = await axiosInstance.post(API_PATHS.QUESTION.ADD_TO_SESSION, {
                   sessionId,
                   questions: newQuestions,
                 });
                 toast.dismiss();
                 toast.success("Question added!");
-                fetchSession();
+                // Optimistically update UI with new question(s) at the end
+                setSessionData((prev) => ({
+                  ...prev,
+                  questions: [...prev.questions, ...saveRes.data],
+                }));
               } catch (err) {
                 toast.dismiss();
                 toast.error("Failed to add question");

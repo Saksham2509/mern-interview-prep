@@ -18,6 +18,7 @@ const Dashboard = () => {
   const location = useLocation(); // ✅ detects route changes
 
   const [sessions, setSessions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openDeleteAlert, setOpenDeleteAlert] = useState({
     open: false,
@@ -25,17 +26,17 @@ const Dashboard = () => {
   });
 
   const fetchAllSessions = async () => {
-  try {
-    const response = await axiosInstance.get(API_PATHS.SESSION.GET_ALL);
-    console.log("📦 Sessions response:", response);
-
-    setSessions(response.data || []);
-  } catch (error) {
-    console.error("Error fetching sessions:", error);
-    toast.error("Failed to load sessions");
-  }
-};
-
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(API_PATHS.SESSION.GET_ALL);
+      setSessions(response.data || []);
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+      toast.error("Failed to load sessions");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const deleteSession = async (sessionData) => {
     try {
@@ -61,7 +62,11 @@ const Dashboard = () => {
         <div className="absolute -top-16 -left-16 w-60 h-60 bg-gradient-to-br from-cyan-300/30 to-blue-400/10 rounded-full blur-2xl z-0 animate-pulse" />
         <div className="absolute -bottom-16 -right-16 w-60 h-60 bg-gradient-to-tr from-blue-300/30 to-cyan-400/10 rounded-full blur-2xl z-0 animate-pulse" />
         <div className="relative z-10">
-        {sessions.length === 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-500" />
+          </div>
+        ) : sessions.length === 0 ? (
           <div className="text-center py-20 flex flex-col items-center justify-center">
             <svg width="80" height="80" fill="none" viewBox="0 0 80 80" className="mb-4 opacity-80">
               <rect width="80" height="80" rx="20" fill="url(#paint0_linear)"/>
