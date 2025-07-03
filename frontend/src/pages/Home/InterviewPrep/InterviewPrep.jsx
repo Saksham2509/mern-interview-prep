@@ -114,14 +114,17 @@ const InterviewPage = () => {
         {/* Modern background orbs for professional look */}
         <div className="absolute -top-10 -left-10 w-40 h-40 bg-gradient-to-br from-cyan-300/30 to-blue-400/10 rounded-full blur-2xl z-0 animate-pulse" />
         <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-gradient-to-tr from-blue-300/30 to-cyan-400/10 rounded-full blur-2xl z-0 animate-pulse" />
-        {/* Back to Sessions Button - beautiful, floating, always visible */}
-        <button
-          onClick={() => navigate("/dashboard")}
-          className="fixed top-8 left-8 z-30 flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow-lg hover:from-blue-700 hover:to-cyan-600 transition-all text-base border-2 border-white/80 backdrop-blur-md"
-        >
-          <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-          Back to Sessions
-        </button>
+        {/* Back to Sessions Button - beautiful, floating, always visible, not overlapping */}
+        <div className="w-full flex justify-start mb-4 md:mb-8">
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="relative z-30 flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow-lg hover:from-blue-700 hover:to-cyan-600 transition-all text-base border-2 border-white/80 backdrop-blur-md"
+            style={{ marginTop: 0 }}
+          >
+            <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            Back to Sessions
+          </button>
+        </div>
         <div className="relative z-10 w-full flex flex-col items-center">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight drop-shadow-lg flex items-center gap-3 text-center">
             <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-700 to-cyan-500 text-white shadow-md text-2xl md:text-3xl font-bold uppercase tracking-wider">
