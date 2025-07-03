@@ -10,6 +10,14 @@ export const createSession = async (req, res) => {
       return res.status(400).json({ message: 'Missing or invalid fields' });
     }
 
+     console.log("🛠️ Saving session with data:", {
+      user: req.user.id,
+      role,
+      experience,
+      topicsToFocus,
+      description,
+    });
+
     const session = await Session.create({
       user: req.user.id,
       role,
@@ -56,6 +64,9 @@ export const getMySessions = async (req, res) => {
 // 🔍 Get a single session with its questions
 export const getSessionById = async (req, res) => {
   try {
+    console.log("🛠️ Fetching session for ID:", req.params.id);
+    console.log("🔐 Authenticated user ID:", req.user.id);
+
     const session = await Session.findOne({
       _id: req.params.id,
       user: req.user.id,
@@ -65,15 +76,18 @@ export const getSessionById = async (req, res) => {
     });
 
     if (!session) {
+      console.warn("⚠️ No session found for this user and ID.");
       return res.status(404).json({ message: 'Session not found' });
     }
 
+    console.log("✅ Found session:", session);
     res.status(200).json({ success: true, session });
   } catch (error) {
-    console.error(error.message);
+    console.error("🔥 Server error in getSessionById:", error.message);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+
 
 // ❌ Delete a session and its associated questions
 export const deleteSession = async (req, res) => {

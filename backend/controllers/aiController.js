@@ -79,6 +79,7 @@ export const generateConceptExplanation = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields" });
 
     const prompt = conceptExplainPrompt(question);
+    console.log("🧠 Prompt sent to Gemini:", prompt);
 
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash-lite",
@@ -86,17 +87,25 @@ export const generateConceptExplanation = async (req, res) => {
     });
 
     const text = getGeminiText(response);
+    console.log("📥 Gemini raw response text:", text); // ← ADD THIS
+
     if (!text) return res.status(500).json({ message: "No response from Gemini" });
 
     const { json, error } = tryParseJSON(text);
-    if (json) res.status(200).json({ explanation: json });
-    else
-      res.status(500).json({
+
+    if (json) {
+      return res.status(200).json({ explanation: json });
+    } else {
+      console.error("❌ JSON parse error:", error);
+      return res.status(500).json({
         message: "Gemini did not return valid JSON",
         raw: text,
         error,
       });
+    }
   } catch (error) {
+    console.error("🔥 AI generation failed:", error.message);
     res.status(500).json({ message: "Failed to generate explanation", error: error.message });
   }
 };
+

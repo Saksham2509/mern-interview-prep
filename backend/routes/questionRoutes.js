@@ -8,8 +8,11 @@ import protect from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.post('/add', protect, addQuestionsToSession);       // Add multiple questions
-router.post('/:id/pin', protect, togglePinQuestion);        // Pin/unpin question
-router.post('/:id/note', protect, updateQuestionNote);      // Add or update a note
+// Create questions (POST)
+router.post('/add', protect, addQuestionsToSession);
+
+// Update routes (PUT)
+router.put('/:id/pin', protect, togglePinQuestion);     // ✅ fix
+router.put('/:id/note', protect, updateQuestionNote);   // ✅ fix
 
 export default router;
