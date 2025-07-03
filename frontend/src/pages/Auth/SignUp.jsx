@@ -1,38 +1,74 @@
-import React, { useState, useContext } from "react";
+// src/pages/SignUp.jsx
+
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Input from "../../components/Inputs/Input";
+import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
+import { validateEmail } from "../../utils/helper";
 import { UserContext } from "../../context/userContext";
 import axiosInstance from "../../utils/axios";
 import { API_PATHS } from "../../utils/apiPaths";
+ // Optional: only if you allow image upload
 
 const SignUp = ({ setCurrentPage }) => {
-  const { setUser } = useContext(UserContext);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [profilePic, setProfilePic] = useState(null);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const { updateUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
+    if (!fullName) {
+      setError("Please enter full name.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (!password || password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const response = await axiosInstance.post(
-        API_PATHS.AUTH.REGISTER,
-        formData
-      );
-      localStorage.setItem("token", response.data.token);
-      setUser(response.data);
-      setCurrentPage(null);
+      let profileImageUrl = "";
+
+      if (profilePic) {
+        const res = await uploadImage(profilePic); // Optional step
+        profileImageUrl = res.imageUrl || "";
+      }
+
+      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+        name: fullName,
+        email,
+        password,
+        profileImageUrl,
+      });
+
+      const { token } = response.data;
+
+      if (token) {
+        localStorage.setItem("token", token);
+        updateUser(response.data);
+        navigate("/dashboard");
+      }
     } catch (err) {
+      console.error("Signup failed:", err);
       setError(
-        err.response?.data?.message || "Registration failed. Please try again."
+        err.response?.data?.message || "Something went wrong. Please try again."
       );
     } finally {
       setLoading(false);
@@ -40,52 +76,61 @@ const SignUp = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="w-full max-w-[400px]">
-      <h2 className="text-xl font-semibold mb-6 text-center">Sign Up</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Name"
-          className="border border-gray-300 rounded px-4 py-2"
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Email"
-          className="border border-gray-300 rounded px-4 py-2"
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Password"
-          className="border border-gray-300 rounded px-4 py-2"
-          required
-        />
+    <div className="w-[90vw] md:w-[33vw] p-7 flex flex-col justify-center">
+      <h3 className="text-lg font-semibold text-black">Create an Account</h3>
+      <p className="text-xs text-slate-700 mt-[5px] mb-6">
+        Join us today by entering your details below.
+      </p>
+
+      <form onSubmit={handleSignUp}>
+        <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
+
+        <div className="grid grid-cols-1 gap-2 mt-3">
+          <Input
+            value={fullName}
+            onChange={({ target }) => setFullName(target.value)}
+            label="Full Name"
+            placeholder="John Doe"
+            type="text"
+          />
+
+          <Input
+            value={email}
+            onChange={({ target }) => setEmail(target.value)}
+            label="Email Address"
+            placeholder="john@example.com"
+            type="email"
+          />
+
+          <Input
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+            label="Password"
+            placeholder="Min 8 characters"
+            type="password"
+          />
+        </div>
+
+        {error && <p className="text-red-500 text-xs py-2">{error}</p>}
+
         <button
           type="submit"
+          className="btn-primary mt-2"
           disabled={loading}
-          className="bg-black text-white py-2 rounded hover:bg-gray-800"
         >
-          {loading ? "Registering..." : "Sign Up"}
+          {loading ? "Creating Account..." : "SIGN UP"}
         </button>
-        <p
-          className="text-sm text-center text-gray-700 cursor-pointer"
-          onClick={() => setCurrentPage("login")}
-        >
-          Already have an account? Login
+
+        <p className="text-[13px] text-slate-800 mt-3">
+          Already have an account?{" "}
+          <button
+            className="font-medium text-primary underline cursor-pointer"
+            type="button"
+            onClick={() => setCurrentPage("login")}
+          >
+            Login
+          </button>
         </p>
-        {error && (
-          <p className="text-red-600 text-center mt-2">{error}</p>
-        )}
       </form>
     </div>
   );

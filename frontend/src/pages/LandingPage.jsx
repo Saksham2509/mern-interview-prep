@@ -1,36 +1,48 @@
-import { useState } from 'react';
-import Hero from '../components/Hero';
-
+// src/pages/LandingPage.jsx
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import Modal from "../components/Modal";
+import Hero from "../components/Hero";
 import Login from "./Auth/login";
 import SignUp from "./Auth/SignUp";
-
+import Features from "../components/Features";
+import { UserContext } from "../context/userContext";
 
 const LandingPage = () => {
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const [openAuthModal, setOpenAuthModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState("login");
+
+  const handleHeroLogin = () => {
+    if (user) navigate("/dashboard");
+    else {
+      setCurrentPage("login");
+      setOpenAuthModal(true);
+    }
+  };
+  const handleHeroSignup = () => {
+    setCurrentPage("signup");
+    setOpenAuthModal(true);
+  };
 
   return (
     <>
-      <Hero onLoginClick={() => setShowLogin(true)} />
+      <Hero onLoginClick={handleHeroLogin} onSignupClick={handleHeroSignup} />
 
-      <Login
-  isOpen={showLogin}
-  onClose={() => setShowLogin(false)}
-  onSwitchToSignup={() => {
-    setShowLogin(false);
-    setShowSignup(true);
-  }}
-/>
+      <Features />
 
-<SignUp
-  isOpen={showSignup}
-  onClose={() => setShowSignup(false)}
-  onSwitchToLogin={() => {
-    setShowSignup(false);
-    setShowLogin(true);
-  }}
-/>
-
+      <Modal
+        isOpen={openAuthModal}
+        onClose={() => {
+          setOpenAuthModal(false);
+          setCurrentPage("login");
+        }}
+      >
+        {currentPage === "login" && <Login setCurrentPage={setCurrentPage} />}
+        {currentPage === "signup" && <SignUp setCurrentPage={setCurrentPage} />}
+      </Modal>
     </>
   );
 };

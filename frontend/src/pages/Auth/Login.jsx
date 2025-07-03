@@ -1,86 +1,110 @@
-import React, { useState, useContext } from "react";
+// src/pages/Login.jsx
+
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+ // assuming custom input
+import { validateEmail } from "../../utils/helper";
+import Input from "../../components/inputs/input";
+
+
 import axiosInstance from "../../utils/axios";
 import { API_PATHS } from "../../utils/apiPaths";
 import { UserContext } from "../../context/userContext";
 
-const Login = ({ setCurrentPage }) => {
-  const { setUser } = useContext(UserContext);
 
+const Login = ({ setCurrentPage }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const { updateUser } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    // Basic validation
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (!password) {
+      setError("Please enter your password.");
+      return;
+    }
+
+    setError("");
+    setLoading(true);
+
     try {
-      setLoading(true);
-      setError("");
-
-      const res = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
         email,
         password,
       });
 
-      // Save token in local storage
-      localStorage.setItem("token", res.data.token);
+      const { token } = response.data;
 
-      // Save user in context
-      setUser(res.data);
-
-      // Optionally close modal or navigate
-      // For example:
-      window.location.href = "/dashboard";
-
+      if (token) {
+        localStorage.setItem("token", token);
+        updateUser(response.data);
+        navigate("/dashboard");
+      }
     } catch (err) {
-      console.error(err);
-      setError(
-        err.response?.data?.message ||
-          "Login failed. Please check your credentials."
-      );
+      const message =
+        err.response?.data?.message || "Login failed. Please try again.";
+      setError(message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-bold mb-4">Login</h2>
-
-      {error && <p className="text-red-500">{error}</p>}
-
-      <input
-        type="email"
-        placeholder="Email"
-        className="w-full p-2 border border-gray-300 rounded"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-
-      <input
-        type="password"
-        placeholder="Password"
-        className="w-full p-2 border border-gray-300 rounded"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-      <button
-        className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
-        onClick={handleLogin}
-        disabled={loading}
-      >
-        {loading ? "Logging in..." : "Login"}
-      </button>
-
-      <p className="text-sm mt-3">
-        Don't have an account?{" "}
-        <span
-          onClick={() => setCurrentPage("signup")}
-          className="text-blue-500 cursor-pointer"
-        >
-          Sign Up
-        </span>
+    <div className="w-[90vw] md:w-[33vw] p-7 flex flex-col justify-center">
+      <h3 className="text-lg font-semibold text-black">Welcome Back</h3>
+      <p className="text-xs text-slate-700 mt-[5px] mb-6">
+        Please enter your details to log in
       </p>
+
+      <form onSubmit={handleLogin}>
+        <Input
+          label="Email Address"
+          type="email"
+          placeholder="john@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <Input
+          label="Password"
+          type="password"
+          placeholder="••••••••"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
+
+        <button
+          type="submit"
+          className="btn-primary"
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "LOGIN"}
+        </button>
+
+        <p className="text-[13px] text-slate-800 mt-3">
+          Don’t have an account?{" "}
+          <button
+            type="button"
+            className="font-medium text-primary underline"
+            onClick={() => setCurrentPage("signup")}
+          >
+            Sign Up
+          </button>
+        </p>
+      </form>
     </div>
   );
 };

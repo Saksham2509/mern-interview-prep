@@ -1,38 +1,53 @@
 import React, { createContext, useState, useEffect } from "react";
-import axiosInstance from "../utils/axios";
+import axiosInstance from "../utils/axios"; // or axiosInstance if you renamed it
 import { API_PATHS } from "../utils/apiPaths";
 
-// Create the context
 export const UserContext = createContext();
 
-// Context Provider component
-export const UserProvider = ({ children }) => {
+const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Check if user is already logged in (on app refresh)
+  // Fetch user profile if token is found
   useEffect(() => {
-    const checkLoggedIn = async () => {
+    const fetchUser = async () => {
       const token = localStorage.getItem("token");
-      if (token) {
-        try {
-          const res = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE);
-          setUser(res.data);
-        } catch (error) {
-          console.error("Failed to fetch user profile:", error);
-          localStorage.removeItem("token");
-          setUser(null);
-        }
+      if (!token) {
+        setLoading(false);
+        return;
       }
-      setLoading(false);
+
+      try {
+        const response = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE);
+        setUser(response.data);
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+        clearUser();
+      } finally {
+        setLoading(false);
+      }
     };
 
-    checkLoggedIn();
+    fetchUser();
   }, []);
 
+  const updateUser = (userData) => {
+    setUser(userData);
+    if (userData?.token) {
+      localStorage.setItem("token", userData.token);
+    }
+  };
+
+  const clearUser = () => {
+    setUser(null);
+    localStorage.removeItem("token");
+  };
+
   return (
-    <UserContext.Provider value={{ user, setUser, loading }}>
+    <UserContext.Provider value={{ user, loading, updateUser, clearUser }}>
       {children}
     </UserContext.Provider>
   );
 };
+
+export default UserProvider;
