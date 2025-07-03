@@ -5,7 +5,7 @@ import SpinnerLoader from "../../components/loader/SpinnerLoader";
 import axiosInstance from "../../utils/axios";
 import { API_PATHS } from "../../utils/apiPaths";
 
-const CreateSessionForm = () => {
+const CreateSessionForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
     role: "",
     experience: "",
@@ -84,8 +84,31 @@ const CreateSessionForm = () => {
   };
 
   return (
-    <div className="w-[90vw] md:w-[35vw] p-7 flex flex-col justify-center">
-      <h3 className="text-lg font-semibold text-black">
+    <div className="w-[90vw] md:w-[35vw] p-7 flex flex-col justify-center relative overflow-visible">
+      {/* Custom close button for modals without header */}
+      <button
+        type="button"
+        onClick={onSuccess}
+        className="absolute top-4 right-4 z-10 text-gray-400 hover:text-red-500 transition-colors duration-200 rounded-full p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400"
+        aria-label="Close modal"
+        style={{ fontSize: 28, lineHeight: 1 }}
+      >
+        <svg
+          className="w-7 h-7"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2.5}
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+      <h3 className="text-lg font-semibold text-black mt-2">
         Start a New Interview Journey
       </h3>
       <p className="text-xs text-slate-700 mt-[5px] mb-3">
@@ -126,7 +149,7 @@ const CreateSessionForm = () => {
 
         <button
           type="submit"
-          className="btn-primary w-full mt-2 flex items-center justify-center gap-2"
+          className="w-full mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-2.5 rounded-full shadow-md hover:scale-105 hover:shadow-lg transition text-base disabled:opacity-60 disabled:cursor-not-allowed"
           disabled={isLoading}
         >
           {isLoading && <SpinnerLoader />}
