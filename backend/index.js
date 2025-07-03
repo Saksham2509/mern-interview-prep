@@ -19,10 +19,10 @@ const PORT = process.env.PORT || 5000;
 
 // Enable CORS
 app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: 'https://mern-interview-prep.vercel.app',
+  credentials: true,
 }));
+
 
 // Parse incoming JSON
 app.use(express.json());
