@@ -109,113 +109,113 @@ const InterviewPage = () => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-white via-blue-50 to-cyan-50 min-h-screen relative">
-      {/* Modern background orbs for professional look */}
-      <div className="absolute -top-10 -left-10 w-40 h-40 bg-gradient-to-br from-cyan-300/30 to-blue-400/10 rounded-full blur-2xl z-0 animate-pulse" />
-      <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-gradient-to-tr from-blue-300/30 to-cyan-400/10 rounded-full blur-2xl z-0 animate-pulse" />
-      <div className="relative z-10">
+    <DashboardLayout>
+      <div className="container mx-auto pt-10 pb-20 max-w-3xl relative min-h-[90vh] flex flex-col items-center justify-start">
+        {/* Modern background orbs for professional look */}
+        <div className="absolute -top-10 -left-10 w-40 h-40 bg-gradient-to-br from-cyan-300/30 to-blue-400/10 rounded-full blur-2xl z-0 animate-pulse" />
+        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-gradient-to-tr from-blue-300/30 to-cyan-400/10 rounded-full blur-2xl z-0 animate-pulse" />
+        {/* Back to Sessions Button - beautiful, floating, always visible */}
         <button
           onClick={() => navigate("/dashboard")}
-          className="absolute -top-8 left-0 flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow hover:from-blue-700 hover:to-cyan-600 transition-all text-sm drop-shadow-lg border-2 border-white/80"
-          style={{ minWidth: 0 }}
+          className="fixed top-8 left-8 z-30 flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow-lg hover:from-blue-700 hover:to-cyan-600 transition-all text-base border-2 border-white/80 backdrop-blur-md"
         >
-          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+          <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
           Back to Sessions
         </button>
-
-        <h2 className="text-2xl md:text-3xl font-extrabold mb-2 tracking-tight drop-shadow-lg flex items-center gap-3">
-          <span className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-blue-700 to-cyan-500 text-white shadow-md text-lg md:text-xl font-bold uppercase tracking-wider">
-            <svg className="w-6 h-6 mr-2 text-white/80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3-1.343 3-3 3-3-1.343-3-3zm0 0c0-1.657-1.343-3-3-3s-3 1.343-3 3 1.343 3 3 3 3-1.343 3-3zm0 8v-2m0 0c-4.418 0-8-1.79-8-4V7a2 2 0 012-2h16a2 2 0 012 2v6c0 2.21-3.582 4-8 4z" /></svg>
-            {sessionData?.role ?? "N/A"}
-          </span>
-        </h2>
-        <div className="flex flex-wrap gap-4 mb-8 text-base md:text-lg font-medium">
-          <div className="bg-gradient-to-r from-cyan-100 to-cyan-200 rounded-lg px-4 py-2 shadow border border-cyan-200 flex items-center gap-2 min-w-[160px]">
-            <span className="font-semibold text-cyan-700">Topics:</span>
-            <span className="text-cyan-900 truncate max-w-[200px]">{sessionData?.topicsToFocus?.length ? sessionData.topicsToFocus.join(", ") : "N/A"}</span>
-          </div>
-          <div className="bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg px-4 py-2 shadow border border-blue-200 flex items-center gap-2 min-w-[160px]">
-            <span className="font-semibold text-blue-700">Experience:</span>
-            <span className="text-blue-900">{sessionData?.experience ?? "N/A"} {sessionData?.experience && !isNaN(Number(sessionData.experience)) ? (Number(sessionData.experience) === 1 ? "year" : "years") : ""}</span>
+        <div className="relative z-10 w-full flex flex-col items-center">
+          <h2 className="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight drop-shadow-lg flex items-center gap-3 text-center">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-700 to-cyan-500 text-white shadow-md text-2xl md:text-3xl font-bold uppercase tracking-wider">
+              <svg className="w-7 h-7 mr-2 text-white/80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3-1.343 3-3 3-3-1.343-3-3zm0 0c0-1.657-1.343-3-3-3s-3 1.343-3 3 1.343 3 3 3 3-1.343 3-3zm0 8v-2m0 0c-4.418 0-8-1.79-8-4V7a2 2 0 012-2h16a2 2 0 012 2v6c0 2.21-3.582 4-8 4z" /></svg>
+              {sessionData?.role ?? "N/A"}
+            </span>
+          </h2>
+          <div className="flex flex-wrap gap-4 mb-10 text-base md:text-lg font-medium justify-center w-full">
+            <div className="bg-gradient-to-r from-cyan-100 to-cyan-200 rounded-lg px-5 py-2 shadow border border-cyan-200 flex items-center gap-2 min-w-[160px]">
+              <span className="font-semibold text-cyan-700">Topics:</span>
+              <span className="text-cyan-900 truncate max-w-[200px]">{sessionData?.topicsToFocus?.length ? sessionData.topicsToFocus.join(", ") : "N/A"}</span>
+            </div>
+            <div className="bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg px-5 py-2 shadow border border-blue-200 flex items-center gap-2 min-w-[160px]">
+              <span className="font-semibold text-blue-700">Experience:</span>
+              <span className="text-blue-900">{sessionData?.experience ?? "N/A"} {sessionData?.experience && !isNaN(Number(sessionData.experience)) ? (Number(sessionData.experience) === 1 ? "year" : "years") : ""}</span>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="flex flex-col gap-6">
-        {sessionData?.questions?.map((item, index) => (
-          <QuestionCard
-            key={item._id || index}
-            question={item.question}
-            answer={item.answer}
-            note={item.note}
-            isPinned={item.isPinned}
-            onTogglePin={() => handleTogglePin(item._id)}
-            onLearnMore={() => handleGenerateExplanation(item._id, item.question)}
-            onUpdateNote={async (newNote) => {
-              setSessionData((prev) => ({
-                ...prev,
-                questions: prev.questions.map((q) =>
-                  q._id === item._id ? { ...q, note: newNote } : q
-                ),
-              }));
+        <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto">
+          {sessionData?.questions?.map((item, index) => (
+            <QuestionCard
+              key={item._id || index}
+              question={item.question}
+              answer={item.answer}
+              note={item.note}
+              isPinned={item.isPinned}
+              onTogglePin={() => handleTogglePin(item._id)}
+              onLearnMore={() => handleGenerateExplanation(item._id, item.question)}
+              onUpdateNote={async (newNote) => {
+                setSessionData((prev) => ({
+                  ...prev,
+                  questions: prev.questions.map((q) =>
+                    q._id === item._id ? { ...q, note: newNote } : q
+                  ),
+                }));
+                try {
+                  await axiosInstance.put(API_PATHS.QUESTION.UPDATE_NOTE(item._id), {
+                    note: newNote,
+                  });
+                  toast.success("Note updated!");
+                } catch {
+                  toast.error("Failed to update note");
+                  fetchSession();
+                }
+              }}
+              loadingExplanation={generatingExplanation}
+              cardIndex={index}
+            />
+          ))}
+        </div>
+        <div className="mb-8 flex justify-end w-full max-w-2xl mx-auto">
+          <button
+            className="px-6 py-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold shadow-lg hover:from-cyan-600 hover:to-blue-600 transition-all text-lg"
+            onClick={async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (!sessionData) return;
               try {
-                await axiosInstance.put(API_PATHS.QUESTION.UPDATE_NOTE(item._id), {
-                  note: newNote,
+                const numberOfQuestions = 1;
+                toast.loading("Generating a new question...");
+                const aiRes = await axiosInstance.post(API_PATHS.AI.GENERATE_QUESTIONS, {
+                  role: sessionData.role,
+                  experience: sessionData.experience,
+                  topicsToFocus: sessionData.topicsToFocus,
+                  numberOfQuestions,
                 });
-                toast.success("Note updated!");
-              } catch {
-                toast.error("Failed to update note");
-                fetchSession();
+                const newQuestions = aiRes.data.questions;
+                // Save new question to session
+                const saveRes = await axiosInstance.post(API_PATHS.QUESTION.ADD_TO_SESSION, {
+                  sessionId,
+                  questions: newQuestions,
+                });
+                toast.dismiss();
+                toast.success("Question added!");
+                setSessionData((prev) => ({
+                  ...prev,
+                  questions: [...prev.questions, ...saveRes.data],
+                }));
+                // Scroll to the new question
+                setTimeout(() => {
+                  const lastCard = document.querySelector('.question-card:last-child');
+                  if (lastCard) lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+              } catch (err) {
+                toast.dismiss();
+                toast.error("Failed to add question");
               }
             }}
-            loadingExplanation={generatingExplanation}
-            cardIndex={index}
-          />
-        ))}
+          >
+            + Add Question
+          </button>
+        </div>
       </div>
-      <div className="mb-8 flex justify-end">
-        <button
-          className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold shadow hover:from-cyan-600 hover:to-blue-600 transition-all text-base"
-          onClick={async (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (!sessionData) return;
-            try {
-              const numberOfQuestions = 1;
-              toast.loading("Generating a new question...");
-              const aiRes = await axiosInstance.post(API_PATHS.AI.GENERATE_QUESTIONS, {
-                role: sessionData.role,
-                experience: sessionData.experience,
-                topicsToFocus: sessionData.topicsToFocus,
-                numberOfQuestions,
-              });
-              const newQuestions = aiRes.data.questions;
-              // Save new question to session
-              const saveRes = await axiosInstance.post(API_PATHS.QUESTION.ADD_TO_SESSION, {
-                sessionId,
-                questions: newQuestions,
-              });
-              toast.dismiss();
-              toast.success("Question added!");
-              setSessionData((prev) => ({
-                ...prev,
-                questions: [...prev.questions, ...saveRes.data],
-              }));
-              // Scroll to the new question
-              setTimeout(() => {
-                const lastCard = document.querySelector('.question-card:last-child');
-                if (lastCard) lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }, 100);
-            } catch (err) {
-              toast.dismiss();
-              toast.error("Failed to add question");
-            }
-          }}
-        >
-          + Add Question
-        </button>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

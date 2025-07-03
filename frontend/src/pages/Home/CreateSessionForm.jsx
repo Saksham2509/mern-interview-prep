@@ -84,8 +84,7 @@ const CreateSessionForm = ({ onSuccess }) => {
   };
 
   return (
-    <div className="w-[90vw] md:w-[35vw] p-7 flex flex-col justify-center relative overflow-visible">
-      {/* Custom close button for modals without header */}
+    <div className="w-full max-w-lg md:max-w-xl flex flex-col items-center justify-center">
       <button
         type="button"
         onClick={onSuccess}
@@ -108,54 +107,54 @@ const CreateSessionForm = ({ onSuccess }) => {
           />
         </svg>
       </button>
-      <h3 className="text-lg font-semibold text-black mt-2">
-        Start a New Interview Journey
-      </h3>
-      <p className="text-xs text-slate-700 mt-[5px] mb-3">
-        Fill out a few quick details and unlock your personalized set of
-        interview questions!
-      </p>
-
-      <form onSubmit={handleCreateSession} className="flex flex-col gap-3">
-        <Input
-          label="Target Role"
-          value={formData.role}
-          onChange={(e) => handleChange("role", e.target.value)}
-          placeholder="(e.g., Frontend Developer)"
-          type="text"
-        />
-        <Input
-          label="Years of Experience"
-          value={formData.experience}
-          onChange={(e) => handleChange("experience", e.target.value)}
-          placeholder="(e.g., 1, 3, 5+)"
-          type="number"
-        />
-        <Input
-          label="Topics to Focus On"
-          value={formData.topicsToFocus}
-          onChange={(e) => handleChange("topicsToFocus", e.target.value)}
-          placeholder="(e.g., React, Node.js)"
-          type="text"
-        />
-        <Input
-          label="Description"
-          value={formData.description}
-          onChange={(e) => handleChange("description", e.target.value)}
-          placeholder="(Optional)"
-          type="text"
-        />
-        {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
-
-        <button
-          type="submit"
-          className="w-full mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-2.5 rounded-full shadow-md hover:scale-105 hover:shadow-lg transition text-base disabled:opacity-60 disabled:cursor-not-allowed"
-          disabled={isLoading}
-        >
-          {isLoading && <SpinnerLoader />}
-          Create Session
-        </button>
-      </form>
+      <div className="w-full px-8 py-7 flex flex-col justify-center">
+        <h3 className="text-2xl font-extrabold text-black mb-1 text-center">
+          Start a New Interview Journey
+        </h3>
+        <p className="text-xs text-slate-700 mb-3 text-center">
+          Fill out a few quick details and unlock your personalized set of
+          interview questions!
+        </p>
+        <form onSubmit={handleCreateSession} className="flex flex-col gap-3">
+          <Input
+            label="Target Role"
+            value={formData.role}
+            onChange={(e) => handleChange("role", e.target.value)}
+            placeholder="(e.g., Frontend Developer)"
+            type="text"
+          />
+          <Input
+            label="Years of Experience"
+            value={formData.experience}
+            onChange={(e) => handleChange("experience", e.target.value)}
+            placeholder="(e.g., 1, 3, 5+)"
+            type="number"
+          />
+          <Input
+            label="Topics to Focus On"
+            value={formData.topicsToFocus}
+            onChange={(e) => handleChange("topicsToFocus", e.target.value)}
+            placeholder="(e.g., React, Node.js)"
+            type="text"
+          />
+          <Input
+            label="Description"
+            value={formData.description}
+            onChange={(e) => handleChange("description", e.target.value)}
+            placeholder="(Optional)"
+            type="text"
+          />
+          {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
+          <button
+            type="submit"
+            className="w-full mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-2.5 rounded-full shadow-md hover:scale-105 hover:shadow-lg transition text-base disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={isLoading}
+          >
+            {isLoading && <SpinnerLoader />}
+            Create Session
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

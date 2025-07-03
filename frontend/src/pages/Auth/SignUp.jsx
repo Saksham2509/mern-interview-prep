@@ -76,10 +76,10 @@ const SignUp = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="w-[90vw] md:w-[33vw] p-0 rounded-2xl shadow-2xl bg-gradient-to-br from-cyan-50 via-blue-50 to-white border border-cyan-100">
-      <div className="px-8 py-7 flex flex-col justify-center">
-        <h3 className="text-2xl font-extrabold text-cyan-700 mb-1 drop-shadow-sm">Create an Account</h3>
-        <p className="text-xs text-slate-700 mb-6">Join us today by entering your details below.</p>
+    <div className="w-full max-w-lg md:max-w-xl flex flex-col items-center justify-center">
+      <div className="w-full px-8 py-7 flex flex-col justify-center">
+        <h3 className="text-2xl font-extrabold text-cyan-700 mb-1 drop-shadow-sm text-center">Create an Account</h3>
+        <p className="text-xs text-slate-700 mb-6 text-center">Join us today by entering your details below.</p>
         <form onSubmit={handleSignUp}>
           <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
           <div className="grid grid-cols-1 gap-2 mt-3">

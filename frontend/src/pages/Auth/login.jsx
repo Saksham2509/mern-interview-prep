@@ -61,10 +61,10 @@ const Login = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="w-[90vw] md:w-[33vw] p-0 rounded-2xl shadow-2xl bg-gradient-to-br from-blue-50 via-cyan-50 to-white border border-blue-100">
-      <div className="px-8 py-7 flex flex-col justify-center">
-        <h3 className="text-2xl font-extrabold text-blue-700 mb-1 drop-shadow-sm">Welcome Back</h3>
-        <p className="text-xs text-slate-700 mb-6">Please enter your details to log in</p>
+    <div className="w-full max-w-lg md:max-w-xl flex flex-col items-center justify-center">
+      <div className="w-full px-8 py-7 flex flex-col justify-center">
+        <h3 className="text-2xl font-extrabold text-blue-700 mb-1 drop-shadow-sm text-center">Welcome Back</h3>
+        <p className="text-xs text-slate-700 mb-6 text-center">Please enter your details to log in</p>
         <form onSubmit={handleLogin}>
           <Input
             label="Email Address"

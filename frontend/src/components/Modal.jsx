@@ -4,9 +4,9 @@ const Modal = ({ children, isOpen, onClose, title, hideHeader = false }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-blue-200/60 via-cyan-200/60 to-blue-400/60 backdrop-blur-[3px] animate-fadeIn">
-      <div className="relative w-full max-w-md transform transition-all duration-300 ease-in-out scale-100 animate-modalPop">
-        <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-blue-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-0 bg-gradient-to-br from-blue-200/60 via-cyan-200/60 to-blue-400/60 backdrop-blur-[3px] animate-fadeIn">
+      <div className="relative w-full max-w-xl md:max-w-2xl transform transition-all duration-300 ease-in-out scale-100 animate-modalPop">
+        <div className="relative bg-white rounded-2xl shadow-2xl overflow-visible border border-blue-100">
           {/* Modal Header */}
           {!hideHeader && (
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
@@ -39,8 +39,10 @@ const Modal = ({ children, isOpen, onClose, title, hideHeader = false }) => {
           )}
 
           {/* Modal Body */}
-          <div className="p-7 overflow-y-auto max-h-[80vh] custom-scrollbar bg-white">
-            {children}
+          <div className="p-0 md:p-0 overflow-visible bg-white flex items-center justify-center min-h-[420px] md:min-h-[520px]">
+            <div className="w-full max-w-lg md:max-w-xl flex flex-col items-center justify-center">
+              {children}
+            </div>
           </div>
         </div>
       </div>
