@@ -76,62 +76,55 @@ const SignUp = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="w-[90vw] md:w-[33vw] p-7 flex flex-col justify-center">
-      <h3 className="text-lg font-semibold text-black">Create an Account</h3>
-      <p className="text-xs text-slate-700 mt-[5px] mb-6">
-        Join us today by entering your details below.
-      </p>
-
-      <form onSubmit={handleSignUp}>
-        <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
-
-        <div className="grid grid-cols-1 gap-2 mt-3">
-          <Input
-            value={fullName}
-            onChange={({ target }) => setFullName(target.value)}
-            label="Full Name"
-            placeholder="John Doe"
-            type="text"
-          />
-
-          <Input
-            value={email}
-            onChange={({ target }) => setEmail(target.value)}
-            label="Email Address"
-            placeholder="john@example.com"
-            type="email"
-          />
-
-          <Input
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            label="Password"
-            placeholder="Min 8 characters"
-            type="password"
-          />
-        </div>
-
-        {error && <p className="text-red-500 text-xs py-2">{error}</p>}
-
-        <button
-          type="submit"
-          className="btn-primary mt-2"
-          disabled={loading}
-        >
-          {loading ? "Creating Account..." : "SIGN UP"}
-        </button>
-
-        <p className="text-[13px] text-slate-800 mt-3">
-          Already have an account?{" "}
+    <div className="w-[90vw] md:w-[33vw] p-0 rounded-2xl shadow-2xl bg-gradient-to-br from-cyan-50 via-blue-50 to-white border border-cyan-100">
+      <div className="px-8 py-7 flex flex-col justify-center">
+        <h3 className="text-2xl font-extrabold text-cyan-700 mb-1 drop-shadow-sm">Create an Account</h3>
+        <p className="text-xs text-slate-700 mb-6">Join us today by entering your details below.</p>
+        <form onSubmit={handleSignUp}>
+          <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
+          <div className="grid grid-cols-1 gap-2 mt-3">
+            <Input
+              value={fullName}
+              onChange={({ target }) => setFullName(target.value)}
+              label="Full Name"
+              placeholder="John Doe"
+              type="text"
+            />
+            <Input
+              value={email}
+              onChange={({ target }) => setEmail(target.value)}
+              label="Email Address"
+              placeholder="john@example.com"
+              type="email"
+            />
+            <Input
+              value={password}
+              onChange={({ target }) => setPassword(target.value)}
+              label="Password"
+              placeholder="Min 8 characters"
+              type="password"
+            />
+          </div>
+          {error && <p className="text-red-500 text-xs py-2">{error}</p>}
           <button
-            className="font-medium text-primary underline cursor-pointer"
-            type="button"
-            onClick={() => setCurrentPage("login")}
+            type="submit"
+            className="w-full mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-500 text-white font-bold py-2.5 rounded-full shadow-md hover:scale-105 hover:shadow-lg transition text-base disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={loading}
           >
-            Login
+            {loading ? "Creating Account..." : "SIGN UP"}
           </button>
-        </p>
-      </form>
+          <p className="text-[13px] text-slate-800 mt-3 text-center">
+            Already have an account?{' '}
+            <button
+              className="font-semibold text-blue-700 underline hover:text-cyan-700 transition"
+              type="button"
+              onClick={() => setCurrentPage("login")}
+            >
+              Login
+            </button>
+          </p>
+        </form>
+      </div>
     </div>
   );
 };

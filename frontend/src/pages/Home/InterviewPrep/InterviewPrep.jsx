@@ -116,9 +116,11 @@ const InterviewPage = () => {
       <div className="relative z-10">
         <button
           onClick={() => navigate("/dashboard")}
-          className="mb-6 inline-flex items-center text-sm text-blue-600 hover:underline font-medium"
+          className="absolute -top-8 left-0 flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow hover:from-blue-700 hover:to-cyan-600 transition-all text-sm drop-shadow-lg border-2 border-white/80"
+          style={{ minWidth: 0 }}
         >
-          ← Back to Sessions
+          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+          Back to Sessions
         </button>
 
         <h2 className="text-2xl md:text-3xl font-extrabold mb-2 tracking-tight drop-shadow-lg flex items-center gap-3">
