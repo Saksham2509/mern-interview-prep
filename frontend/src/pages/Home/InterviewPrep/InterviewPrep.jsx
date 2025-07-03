@@ -178,10 +178,8 @@ const InterviewPage = () => {
             onClick={async () => {
               if (!sessionData) return;
               try {
-                const num = prompt("How many new questions do you want to generate?", "5");
-                const numberOfQuestions = parseInt(num, 10);
-                if (!numberOfQuestions || numberOfQuestions < 1) return;
-                toast.loading("Generating more questions...");
+                const numberOfQuestions = 1;
+                toast.loading("Generating a new question...");
                 const aiRes = await axiosInstance.post(API_PATHS.AI.GENERATE_QUESTIONS, {
                   role: sessionData.role,
                   experience: sessionData.experience,
@@ -189,21 +187,21 @@ const InterviewPage = () => {
                   numberOfQuestions,
                 });
                 const newQuestions = aiRes.data.questions;
-                // Save new questions to session
+                // Save new question to session
                 await axiosInstance.post(API_PATHS.QUESTION.ADD_TO_SESSION, {
                   sessionId,
                   questions: newQuestions,
                 });
                 toast.dismiss();
-                toast.success("Questions added!");
+                toast.success("Question added!");
                 fetchSession();
               } catch (err) {
                 toast.dismiss();
-                toast.error("Failed to add questions");
+                toast.error("Failed to add question");
               }
             }}
           >
-            + Add Question(s)
+            + Add Question
           </button>
         </div>
       </div>
