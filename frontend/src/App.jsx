@@ -47,7 +47,7 @@ import { Toaster } from "react-hot-toast";
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import InterviewPrep from "./pages/Home/InterviewPrep/InterviewPrep";
-import Login from "./pages/Auth/login";
+import Login from "./pages/Auth/login.jsx";
 import Signup from "./pages/Auth/SignUp";
 
 import PrivateRoute from "./components/Auth/PrivateRoute";
