@@ -175,7 +175,9 @@ const InterviewPage = () => {
         <div className="mb-8 flex justify-end">
           <button
             className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold shadow hover:from-cyan-600 hover:to-blue-600 transition-all text-base"
-            onClick={async () => {
+            onClick={async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
               if (!sessionData) return;
               try {
                 const numberOfQuestions = 1;
@@ -194,11 +196,15 @@ const InterviewPage = () => {
                 });
                 toast.dismiss();
                 toast.success("Question added!");
-                // Optimistically update UI with new question(s) at the end
                 setSessionData((prev) => ({
                   ...prev,
                   questions: [...prev.questions, ...saveRes.data],
                 }));
+                // Scroll to the new question
+                setTimeout(() => {
+                  const lastCard = document.querySelector('.question-card:last-child');
+                  if (lastCard) lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
               } catch (err) {
                 toast.dismiss();
                 toast.error("Failed to add question");
