@@ -61,8 +61,9 @@ const Login = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="w-full max-w-lg md:max-w-xl flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-cyan-100 to-blue-200 rounded-2xl shadow-2xl border border-blue-200">
-      <div className="w-full px-8 py-7 flex flex-col justify-center bg-white/90 rounded-2xl">
+    <div className="w-full max-w-lg md:max-w-xl flex flex-col items-center justify-center bg-gradient-to-br from-blue-200 via-cyan-100 to-blue-300 rounded-2xl shadow-2xl border border-blue-200 relative">
+      {/* Remove extra close button, rely on Modal's header close */}
+      <div className="w-full px-6 py-6 flex flex-col justify-center bg-gradient-to-br from-white/90 via-blue-50/90 to-cyan-100/90 rounded-2xl mt-2">
         <h3 className="text-2xl font-extrabold text-blue-700 mb-1 drop-shadow-sm text-center">Welcome Back</h3>
         <p className="text-xs text-slate-700 mb-6 text-center">Please enter your details to log in</p>
         <form onSubmit={handleLogin}>
