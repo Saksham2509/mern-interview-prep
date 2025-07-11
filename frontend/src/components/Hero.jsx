@@ -4,11 +4,20 @@ import { UserContext } from "../context/userContext";
 const Hero = ({ onLoginClick, onSignupClick, onLogin, onSignup, onGetStarted }) => {
   const { user } = useContext(UserContext);
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-cyan-100 to-blue-200 overflow-hidden px-4">
+    <section className="relative flex flex-col md:flex-row items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-cyan-100 to-blue-200 overflow-hidden px-4">
       {/* Animated background shapes */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className="absolute -top-32 -left-32 w-[400px] h-[400px] bg-gradient-to-br from-cyan-300/40 to-blue-400/30 rounded-full blur-3xl animate-pulse-slow" />
         <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-gradient-to-tr from-blue-300/30 to-cyan-200/40 rounded-full blur-2xl animate-pulse-slower" />
+      </div>
+      {/* Hero Image */}
+      <div className="relative z-10 flex-shrink-0 flex items-center justify-center md:mr-12 mb-8 md:mb-0">
+        <img
+          src="https://media.licdn.com/dms/image/v2/D5612AQEoTzK2rVxHZQ/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1707420465234?e=2147483647&v=beta&t=IzoxtBV0Y1wyOq5kD05bT5UVW6cSwUVvVJ1n65JdYxA"
+          alt="Interview Prep AI Illustration"
+          className="w-[340px] h-[340px] object-cover rounded-3xl shadow-2xl border-4 border-white/80 bg-white/60"
+          loading="lazy"
+        />
       </div>
       <div className="relative z-10 bg-white/70 backdrop-blur-xl dark:bg-gray-900/80 rounded-3xl shadow-2xl p-10 flex flex-col items-center max-w-2xl w-full border border-blue-100">
         <div className="mb-6">

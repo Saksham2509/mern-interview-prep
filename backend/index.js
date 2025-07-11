@@ -22,6 +22,7 @@ app.use(cors({
   origin: 'https://mern-interview-prep.vercel.app',
   credentials: true,
 }));
+app.options("*", cors());
 
 
 // Parse incoming JSON
