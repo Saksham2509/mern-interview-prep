@@ -190,11 +190,11 @@ import {
 } from "react-icons/lu";
 
 const CARD_COLORS = [
-  "from-cyan-50 to-blue-100 border-cyan-100",
-  "from-blue-50 to-cyan-100 border-blue-100",
-  "from-indigo-50 to-cyan-50 border-indigo-100",
-  "from-sky-50 to-blue-50 border-sky-100",
-  "from-emerald-50 to-cyan-50 border-emerald-100",
+  "from-primary/10 to-secondary/20 border-primary/20",
+  "from-secondary/10 to-primary/20 border-secondary/20", 
+  "from-background to-primary/10 border-border",
+  "from-surface to-secondary/10 border-border",
+  "from-primary/5 to-background border-primary/10",
 ];
 
 const QuestionCard = ({
@@ -242,13 +242,13 @@ const QuestionCard = ({
 
   return (
     <div
-      className={`bg-gradient-to-br ${colorClass} rounded-xl mb-4 overflow-hidden py-4 px-5 shadow-xl shadow-gray-100/70 border group transition-all duration-200 hover:shadow-md hover:scale-[1.01]`}
+      className={`bg-gradient-to-br ${colorClass} rounded-xl mb-4 overflow-hidden py-4 px-5 shadow-xl shadow-primary/10 border group transition-all duration-200 hover:shadow-md hover:scale-[1.01]`}
     >
       <div className="flex items-start justify-between cursor-pointer">
         <div className="flex items-start gap-3.5">
-          <span className="text-xs md:text-[15px] font-semibold text-cyan-500 leading-[18px]">Q</span>
+          <span className="text-xs md:text-[15px] font-semibold text-primary leading-[18px]">Q</span>
           <h3
-            className="text-xs md:text-[15px] font-semibold text-blue-900 mr-0 md:mr-20 drop-shadow-sm"
+            className="text-xs md:text-[15px] font-semibold text-textPrimary mr-0 md:mr-20 drop-shadow-sm"
             onClick={() => setIsExpanded((prev) => !prev)}
           >
             {question}
@@ -258,8 +258,8 @@ const QuestionCard = ({
           <button
             className={`flex items-center gap-1 text-xs font-medium px-3 py-1 rounded border transition-all ${
               isPinned
-                ? "bg-yellow-100 text-yellow-800 border-yellow-100 hover:border-yellow-300"
-                : "bg-gray-100 text-gray-700 border-gray-100 hover:border-gray-300"
+                ? "bg-warning/20 text-textPrimary border-warning/30 hover:border-warning/50"
+                : "bg-background text-textSecondary border-border hover:border-primary/30"
             }`}
             onClick={onTogglePin}
           >
@@ -268,7 +268,7 @@ const QuestionCard = ({
           </button>
           <button
             disabled={loadingExplanation}
-            className="flex items-center gap-1 text-xs text-cyan-800 font-medium bg-cyan-50 px-3 py-1 rounded border border-cyan-50 hover:border-cyan-200 transition-all"
+            className="flex items-center gap-1 text-xs text-primary font-medium bg-primary/10 px-3 py-1 rounded border border-primary/20 hover:border-primary/40 transition-all"
             onClick={async () => {
               setIsExpanded(true);
               const newNote = await onLearnMore();
@@ -281,7 +281,7 @@ const QuestionCard = ({
             </span>
           </button>
           <button
-            className="text-gray-400 hover:text-gray-500"
+            className="text-textSecondary hover:text-textPrimary"
             onClick={() => setIsExpanded((prev) => !prev)}
           >
             <LuChevronDown
@@ -303,26 +303,26 @@ const QuestionCard = ({
       >
         <div
           ref={contentRef}
-          className="mt-4 bg-white/80 px-5 py-3 rounded-lg space-y-4 border border-blue-50"
+          className="mt-4 bg-surface/80 px-5 py-3 rounded-lg space-y-4 border border-border"
         >
           {/* Answer Preview */}
-          <div className="text-sm text-blue-800 whitespace-pre-line font-medium">
+          <div className="text-sm text-textPrimary whitespace-pre-line font-medium">
             {answer}
           </div>
 
           {/* Notes Section */}
           <div>
-            <h4 className="text-xs font-semibold text-indigo-700 mb-1 flex items-center gap-1">
-              <LuStickyNote className="text-indigo-500" size={14} />
+            <h4 className="text-xs font-semibold text-textPrimary mb-1 flex items-center gap-1">
+              <LuStickyNote className="text-secondary" size={14} />
               Your Notes
             </h4>
-            <div className="bg-white border border-gray-200 rounded p-2 text-xs">
+            <div className="bg-surface border border-border rounded p-2 text-xs">
               {editing ? (
                 <div className="space-y-2">
                   <textarea
                     value={noteText}
                     onChange={(e) => setNoteText(e.target.value)}
-                    className="w-full border border-indigo-200 rounded p-1 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all min-h-[40px] text-xs bg-white shadow-sm"
+                    className="w-full border border-border rounded p-1 focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all min-h-[40px] text-xs bg-surface shadow-sm"
                     placeholder="Add your thoughts or tips here..."
                     rows={2}
                   />
@@ -330,7 +330,7 @@ const QuestionCard = ({
                     <button
                       onClick={handleSave}
                       disabled={saving}
-                      className="px-3 py-0.5 bg-indigo-600 text-white rounded text-xs hover:bg-indigo-700 shadow"
+                      className="px-3 py-0.5 bg-primary text-white rounded text-xs hover:bg-primary/90 shadow"
                     >
                       {saving ? "Saving..." : "Save"}
                     </button>
@@ -339,7 +339,7 @@ const QuestionCard = ({
                         setNoteText(note);
                         setEditing(false);
                       }}
-                      className="text-gray-600 hover:underline"
+                      className="text-textSecondary hover:underline"
                     >
                       Cancel
                     </button>
@@ -347,12 +347,12 @@ const QuestionCard = ({
                 </div>
               ) : (
                 <div className="flex justify-between items-start">
-                  <p className={`text-xs ${noteText ? "text-gray-700" : "text-gray-400 italic"}`}>
+                  <p className={`text-xs ${noteText ? "text-textSecondary" : "text-textSecondary/60 italic"}`}>
                     {noteText || "No notes yet. Click Edit to add your notes."}
                   </p>
                   <button
                     onClick={() => setEditing(true)}
-                    className="text-indigo-600 hover:underline ml-2 font-medium"
+                    className="text-primary hover:underline ml-2 font-medium"
                   >
                     Edit
                   </button>

@@ -20,7 +20,8 @@ const Navbar = () => {
           {/* Brand Logo */}
           <Link
             to="/dashboard"
-            className="flex items-center space-x-2 text-xl font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+            className="flex items-center space-x-2 text-xl font-semibold transition-colors"
+            style={{ color: 'var(--primary-color)' }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +38,8 @@ const Navbar = () => {
           {user && (
             <button
               onClick={handleLogout}
-              className="ml-4 px-4 py-2 bg-red-500 text-white rounded-lg font-medium shadow hover:bg-red-600 transition-colors"
+              className="ml-4 px-4 py-2 text-white rounded-lg font-medium shadow transition-colors"
+              style={{ backgroundColor: 'var(--error-color)' }}
             >
               Logout
             </button>

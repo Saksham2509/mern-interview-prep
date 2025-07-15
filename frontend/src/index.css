@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Professional Color Palette */
+:root {
+  --primary-color: #4A90E2; /* A professional, calm blue */
+  --secondary-color: #50E3C2; /* A soft teal for accents */
+  --background-color: #F4F7F6; /* Off-white, easy on the eyes */
+  --surface-color: #FFFFFF; /* For cards, modals, and popups */
+  --text-primary: #333333; /* Dark grey for main text */
+  --text-secondary: #7F8C8D; /* Lighter grey for subtitles and descriptions */
+  --error-color: #E74C3C; /* A clear red for errors/delete actions */
+  --border-color: #EAECEE; /* Subtle border for separation */
+  --success-color: #27AE60; /* Professional green for success states */
+  --warning-color: #F39C12; /* Professional orange for warnings */
+}

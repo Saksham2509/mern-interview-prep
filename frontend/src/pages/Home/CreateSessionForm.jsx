@@ -144,10 +144,11 @@ const CreateSessionForm = ({ onSuccess }) => {
             placeholder="(Optional)"
             type="text"
           />
-          {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
+          {error && <p className="text-xs pb-2.5" style={{ color: 'var(--error-color)' }}>{error}</p>}
           <button
             type="submit"
-            className="w-full mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-2.5 rounded-full shadow-md hover:scale-105 hover:shadow-lg transition text-base disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full mt-2 flex items-center justify-center gap-2 text-white font-bold py-2.5 rounded-full shadow-md hover:scale-105 hover:shadow-lg transition text-base disabled:opacity-60 disabled:cursor-not-allowed"
+            style={{ background: 'linear-gradient(to right, var(--primary-color), var(--secondary-color))' }}
             disabled={isLoading}
           >
             {isLoading && <SpinnerLoader />}

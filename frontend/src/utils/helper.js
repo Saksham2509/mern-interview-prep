@@ -4,13 +4,16 @@ export const validateEmail = (email) => {
 };
 
 export const getInitials = (title) => {
-  if (!title) return "";
+  // Return empty string for any falsy value or non-string values
+  if (!title || typeof title !== 'string') return "";
 
   const words = title.split(" ");
   let initials = "";
 
   for (let i = 0; i < Math.min(words.length, 2); i++) {
-    initials += words[i][0];
+    if (words[i] && words[i].length > 0) {
+      initials += words[i][0];
+    }
   }
 
   return initials.toUpperCase();

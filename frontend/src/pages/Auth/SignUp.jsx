@@ -106,10 +106,11 @@ const SignUp = ({ setCurrentPage }) => {
               type="password"
             />
           </div>
-          {error && <p className="text-red-500 text-xs py-2">{error}</p>}
+          {error && <p className="text-xs py-2" style={{ color: 'var(--error-color)' }}>{error}</p>}
           <button
             type="submit"
-            className="w-full mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-500 text-white font-bold py-2.5 rounded-full shadow-md hover:scale-105 hover:shadow-lg transition text-base disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full mt-2 flex items-center justify-center gap-2 text-white font-bold py-2.5 rounded-full shadow-md hover:scale-105 hover:shadow-lg transition text-base disabled:opacity-60 disabled:cursor-not-allowed"
+            style={{ background: 'linear-gradient(to right, var(--secondary-color), var(--primary-color))' }}
             disabled={loading}
           >
             {loading ? "Creating Account..." : "SIGN UP"}
@@ -117,7 +118,8 @@ const SignUp = ({ setCurrentPage }) => {
           <p className="text-[13px] text-slate-800 mt-3 text-center">
             Already have an account?{' '}
             <button
-              className="font-semibold text-blue-700 underline hover:text-cyan-700 transition"
+              className="font-semibold underline transition"
+              style={{ color: 'var(--primary-color)' }}
               type="button"
               onClick={() => setCurrentPage("login")}
             >

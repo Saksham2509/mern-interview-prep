@@ -10,7 +10,7 @@ const DashboardLayout = ({ children }) => {
   if (!user) return null; // You can replace this with a loader or redirect later
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--background-color)' }}>
       {/* Navbar at top */}
       <nav>
         <Navbar />
