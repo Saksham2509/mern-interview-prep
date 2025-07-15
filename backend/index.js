@@ -19,49 +19,32 @@ const PORT = process.env.PORT || 5000;
 
 // Enable CORS with comprehensive configuration
 const allowedOrigins = [
-  'http://localhost:5173', // For local development
-  'http://localhost:3000'  // Alternative local port
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://mern-interview-prep.vercel.app'
 ];
 
-// Add production origins
-if (process.env.NODE_ENV === 'production') {
-  // Add common Vercel deployment patterns
-  allowedOrigins.push('https://mern-interview-prep.vercel.app');
-  allowedOrigins.push(/^https:\/\/.*--mern-interview-prep\.vercel\.app$/);  // ✅ Correct preview regex
-  
-  if (process.env.FRONTEND_URL) {
-    allowedOrigins.push(process.env.FRONTEND_URL);
-  }
-}
- else {
-  // Development mode - be more permissive
-  if (process.env.FRONTEND_URL) {
-    allowedOrigins.push(process.env.FRONTEND_URL);
-  }
+// Add custom frontend URL from environment
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
 }
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    // Check if origin is in allowed list
-    const isAllowed = allowedOrigins.some(allowedOrigin => {
-      if (typeof allowedOrigin === 'string') {
-        return allowedOrigin === origin;
-      }
-      if (allowedOrigin instanceof RegExp) {
-        return allowedOrigin.test(origin);
-      }
-      return false;
-    });
-    
-    if (isAllowed) {
-      callback(null, true);
+    if (!origin) return callback(null, true); // Allow curl, Postman, etc.
+
+    const staticAllowed = allowedOrigins.filter(o => typeof o === 'string');
+    const isStaticAllowed = staticAllowed.includes(origin);
+
+    // ✅ Safe check for Vercel preview URLs (no regex in array)
+    const isPreviewURL = origin?.match(/^https:\/\/[a-zA-Z0-9-]+--mern-interview-prep\.vercel\.app$/);
+
+    if (isStaticAllowed || isPreviewURL) {
+      return callback(null, true);
     } else {
-      console.log('CORS blocked origin:', origin);
-      console.log('Allowed origins:', allowedOrigins);
-      callback(new Error('Not allowed by CORS'));
+      console.log('⛔️ CORS blocked origin:', origin);
+      console.log('✅ Allowed origins:', allowedOrigins);
+      return callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
@@ -80,14 +63,11 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle preflight requests
 
-// Handle preflight requests explicitly
-app.options('*', cors(corsOptions));
-
-// Parse incoming JSON
 app.use(express.json());
 
-// Debug middleware to log requests and CORS info
+// Debug middleware
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
   console.log(`Origin: ${req.headers.origin || 'No origin'}`);
