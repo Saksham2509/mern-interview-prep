@@ -27,7 +27,8 @@ const allowedOrigins = [
 if (process.env.NODE_ENV === 'production') {
   // Add common Vercel deployment patterns
   allowedOrigins.push('https://mern-interview-prep.vercel.app');
-  allowedOrigins.push(/^https:\/\/mern-interview-prep.*\.vercel\.app$/); // Handle preview deployments
+  allowedOrigins.push(/^https:\/\/.*--mern-interview-prep\.vercel\.app$/);
+
   
   // Add any custom frontend URL from environment
   if (process.env.FRONTEND_URL) {
