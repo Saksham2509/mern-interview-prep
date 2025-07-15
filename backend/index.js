@@ -19,14 +19,25 @@ const PORT = process.env.PORT || 5000;
 
 // Enable CORS with comprehensive configuration
 const allowedOrigins = [
-  'https://mern-interview-prep.vercel.app',
   'http://localhost:5173', // For local development
   'http://localhost:3000'  // Alternative local port
 ];
 
-// Add environment-specific origins if provided
-if (process.env.FRONTEND_URL) {
-  allowedOrigins.push(process.env.FRONTEND_URL);
+// Add production origins
+if (process.env.NODE_ENV === 'production') {
+  // Add common Vercel deployment patterns
+  allowedOrigins.push('https://mern-interview-prep.vercel.app');
+  allowedOrigins.push(/^https:\/\/mern-interview-prep.*\.vercel\.app$/); // Handle preview deployments
+  
+  // Add any custom frontend URL from environment
+  if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+  }
+} else {
+  // Development mode - be more permissive
+  if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+  }
 }
 
 const corsOptions = {
@@ -34,10 +45,22 @@ const corsOptions = {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    // Check if origin is in allowed list
+    const isAllowed = allowedOrigins.some(allowedOrigin => {
+      if (typeof allowedOrigin === 'string') {
+        return allowedOrigin === origin;
+      }
+      if (allowedOrigin instanceof RegExp) {
+        return allowedOrigin.test(origin);
+      }
+      return false;
+    });
+    
+    if (isAllowed) {
       callback(null, true);
     } else {
       console.log('CORS blocked origin:', origin);
+      console.log('Allowed origins:', allowedOrigins);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -61,24 +84,15 @@ app.use(cors(corsOptions));
 // Handle preflight requests explicitly
 app.options('*', cors(corsOptions));
 
-// Additional CORS headers as fallback
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  next();
-});
-
 // Parse incoming JSON
 app.use(express.json());
 
-// Debug middleware to log requests (helpful for troubleshooting)
+// Debug middleware to log requests and CORS info
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - Origin: ${req.headers.origin || 'No origin'}`);
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  console.log(`Origin: ${req.headers.origin || 'No origin'}`);
+  console.log(`NODE_ENV: ${process.env.NODE_ENV || 'Not set'}`);
+  console.log(`Allowed origins:`, allowedOrigins);
   next();
 });
 
@@ -98,6 +112,8 @@ app.get('/', (req, res) => {
   res.json({ 
     message: 'API is running...',
     cors: 'enabled',
+    environment: process.env.NODE_ENV || 'development',
+    allowedOrigins: allowedOrigins,
     timestamp: new Date().toISOString()
   });
 });
