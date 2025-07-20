@@ -58,6 +58,42 @@ export const togglePinQuestion = async (req, res) => {
   }
 };
 
+
+// Add this new function into server/controllers/questionController.js
+
+export const updateExplanation = async (req, res) => {
+  try {
+    const { id } = req.params; // Using 'id' to match your route parameter
+    const { explanation } = req.body;
+
+    if (typeof explanation !== "string") {
+      return res.status(400).json({ message: "Explanation must be a string" });
+    }
+
+    // Find the question by its ID
+    const question = await Question.findById(id);
+    if (!question) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    // Check if the user making the request owns the session
+    // This is an important security check
+    const session = await Session.findById(question.session);
+    if (session.user.toString() !== req.user.id) {
+      return res.status(401).json({ message: "User not authorized" });
+    }
+
+    // Update and save the explanation
+    question.explanation = explanation;
+    await question.save();
+
+    res.status(200).json({ success: true, question });
+  } catch (error) {
+    console.error("UpdateExplanation Error:", error.message);
+    res.status(500).json({ message: "Server error while updating explanation" });
+  }
+};
+
 // 📝 Update note for a question
 export const updateQuestionNote = async (req, res) => {
   try {

@@ -15,6 +15,11 @@ const questionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    // Add the new field below
+    explanation: {
+      type: String,
+      default: '',
+    },
     note: {
       type: String,
       default: '',

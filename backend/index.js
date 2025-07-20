@@ -18,11 +18,22 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Enable CORS
-app.use(cors({
-  origin: 'https://mern-interview-prep.vercel.app',
-  credentials: true,
-}));
+const allowedOrigins = [
+  "https://mern-interview-prep.vercel.app",
+  "http://localhost:5173", // or 5174 if that's your port
+  "http://localhost:3000"  // optional
+];
 
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 
 // Parse incoming JSON
 app.use(express.json());
