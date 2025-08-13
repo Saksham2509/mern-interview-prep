@@ -4,19 +4,26 @@ import Question from '../models/Question.js';
 // ➕ Create a new session and add linked questions
 export const createSession = async (req, res) => {
   try {
+
     const { role, experience, topicsToFocus, description, questions } = req.body;
 
-    if (!role || !experience || !Array.isArray(questions)) {
-      return res.status(400).json({ message: 'Missing or invalid fields' });
+    if (!role || !experience) {
+      return res.status(400).json({ message: 'Missing required fields' });
     }
 
-     console.log("🛠️ Saving session with data:", {
+    // If questions is not provided, default to empty array
+    const questionsArray = Array.isArray(questions) ? questions : [];
+
+
+    console.log("🛠️ Saving session with data:", {
       user: req.user.id,
       role,
       experience,
       topicsToFocus,
       description,
+      questions: questionsArray
     });
+
 
     const session = await Session.create({
       user: req.user.id,
@@ -26,19 +33,21 @@ export const createSession = async (req, res) => {
       description,
     });
 
-    const createdQuestions = await Promise.all(
-      questions.map(async (q) => {
-        const created = await Question.create({
-          session: session._id,
-          question: q.question,
-          answer: q.answer,
-        });
-        return created._id;
-      })
-    );
-
-    session.questions = createdQuestions;
-    await session.save();
+    let createdQuestions = [];
+    if (questionsArray.length > 0) {
+      createdQuestions = await Promise.all(
+        questionsArray.map(async (q) => {
+          const created = await Question.create({
+            session: session._id,
+            question: q.question,
+            answer: q.answer,
+          });
+          return created._id;
+        })
+      );
+      session.questions = createdQuestions;
+      await session.save();
+    }
 
     res.status(201).json({ success: true, session });
   } catch (error) {
