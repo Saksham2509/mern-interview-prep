@@ -1,5 +1,6 @@
 import Session from '../models/Session.js';
 import Question from '../models/Question.js';
+import { generateQuestionsFromAI } from './aiController.js';
 
 // ➕ Create a new session and add linked questions
 export const createSession = async (req, res) => {
@@ -11,8 +12,22 @@ export const createSession = async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    // If questions is not provided, default to empty array
-    const questionsArray = Array.isArray(questions) ? questions : [];
+    // If questions is not provided, attempt to auto-generate a default set (10)
+    let questionsArray = Array.isArray(questions) ? questions : [];
+    let aiWarning = null;
+    if (questionsArray.length === 0) {
+      try {
+        const generated = await generateQuestionsFromAI(role, experience, topicsToFocus || [], 10);
+        // generated expected to be array of { question, answer }
+        if (Array.isArray(generated) && generated.length > 0) {
+          questionsArray = generated;
+        }
+      } catch (err) {
+        console.warn('AI generation failed when creating session:', err.message);
+        aiWarning = 'Failed to auto-generate initial questions';
+        // proceed with empty questionsArray
+      }
+    }
 
 
     console.log("🛠️ Saving session with data:", {
@@ -49,7 +64,9 @@ export const createSession = async (req, res) => {
       await session.save();
     }
 
-    res.status(201).json({ success: true, session });
+    const payload = { success: true, session };
+    if (aiWarning) payload.warning = aiWarning;
+    res.status(201).json(payload);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ success: false, message: 'Server error' });

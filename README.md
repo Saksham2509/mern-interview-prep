@@ -137,9 +137,3 @@ Protected routes require `Authorization: Bearer <token>` header.
 - Prompts are built in `backend/utils/prompt.js`; `GEMINI_API_KEY` is used to authenticate.
 - Responses are parsed and returned as JSON to the frontend.
 
-## Notes & Recommendations
-
-- Add request rate-limiting and caching on AI endpoints to control costs and latency.
-- Add unit and integration tests (none currently included).
-- Consider Docker + `docker-compose` for a reproducible local environment (Mongo + backend + frontend).
-- Add monitoring/alerting for API errors and failed AI calls.

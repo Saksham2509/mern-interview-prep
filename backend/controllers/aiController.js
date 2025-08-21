@@ -49,27 +49,38 @@ export const generateInterviewQuestions = async (req, res) => {
       ? topicsToFocus.map((t) => String(t).trim()).filter(Boolean)
       : String(topicsToFocus).split(",").map((t) => t.trim()).filter(Boolean);
 
-  const prompt = questionAnswerPrompt(role, experience, topics, numQ);
-
-    const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash-lite",
-      contents: [{ text: prompt }],
-    });
-
-    const text = getGeminiText(response);
-    if (!text) return res.status(500).json({ message: "No response from Gemini" });
-
-    const { json, error } = tryParseJSON(text);
-    if (json) res.status(200).json({ questions: json });
-    else
-      res.status(500).json({
-        message: "Gemini did not return valid JSON",
-        raw: text,
-        error,
-      });
+    const questions = await generateQuestionsFromAI(role, experience, topics, numQ);
+    return res.status(200).json({ questions });
   } catch (error) {
     res.status(500).json({ message: "Failed to generate questions", error: error.message });
   }
+};
+
+// Helper: generate questions programmatically (returns parsed JSON array)
+export const generateQuestionsFromAI = async (role, experience, topicsToFocus, numberOfQuestions) => {
+  // Reuse same validation as controller
+  const numQ = Number(numberOfQuestions);
+  if (!role || !experience || !topicsToFocus || !numQ || isNaN(numQ) || numQ <= 0) {
+    throw new Error('Missing or invalid required fields for AI generation');
+  }
+
+  const topics = Array.isArray(topicsToFocus)
+    ? topicsToFocus.map((t) => String(t).trim()).filter(Boolean)
+    : String(topicsToFocus).split(',').map((t) => t.trim()).filter(Boolean);
+
+  const prompt = questionAnswerPrompt(role, experience, topics, numQ);
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.0-flash-lite',
+    contents: [{ text: prompt }],
+  });
+
+  const text = getGeminiText(response);
+  if (!text) throw new Error('No response from Gemini');
+
+  const { json, error } = tryParseJSON(text);
+  if (json) return json;
+  throw new Error(`Gemini did not return valid JSON: ${error}`);
 };
 
 export const generateConceptExplanation = async (req, res) => {
