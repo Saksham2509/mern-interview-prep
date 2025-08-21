@@ -45,6 +45,15 @@ export const togglePinQuestion = async (req, res) => {
       return res.status(404).json({ message: "Question not found" });
     }
 
+    // Ensure the authenticated user owns the session that this question belongs to
+    const session = await Session.findById(question.session);
+    if (!session) {
+      return res.status(404).json({ message: "Session for this question not found" });
+    }
+    if (session.user.toString() !== req.user.id) {
+      return res.status(401).json({ message: "User not authorized to modify this question" });
+    }
+
     question.isPinned = !question.isPinned;
     await question.save();
 
@@ -79,6 +88,9 @@ export const updateExplanation = async (req, res) => {
     // Check if the user making the request owns the session
     // This is an important security check
     const session = await Session.findById(question.session);
+    if (!session) {
+      return res.status(404).json({ message: "Session for this question not found" });
+    }
     if (session.user.toString() !== req.user.id) {
       return res.status(401).json({ message: "User not authorized" });
     }
@@ -109,9 +121,16 @@ export const updateQuestionNote = async (req, res) => {
       return res.status(404).json({ message: "Question not found" });
     }
 
+    // Verify ownership: only the session owner can update notes
+    const session = await Session.findById(question.session);
+    if (!session) {
+      return res.status(404).json({ message: "Session for this question not found" });
+    }
+    if (session.user.toString() !== req.user.id) {
+      return res.status(401).json({ message: "User not authorized to update this note" });
+    }
     question.note = note.trim();
     await question.save();
-
     res.status(200).json({ success: true, question });
   } catch (error) {
     console.error("UpdateNote Error:", error.message);

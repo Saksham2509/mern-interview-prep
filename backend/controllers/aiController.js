@@ -39,16 +39,17 @@ export const generateInterviewQuestions = async (req, res) => {
   try {
     const { role, experience, topicsToFocus, numberOfQuestions } = req.body;
 
-    if (!role || !experience || !topicsToFocus || !numberOfQuestions) {
-      return res.status(400).json({ message: "Missing required fields" });
+    // Basic validation and normalization
+    const numQ = Number(numberOfQuestions);
+    if (!role || !experience || !topicsToFocus || !numQ || isNaN(numQ) || numQ <= 0) {
+      return res.status(400).json({ message: "Missing or invalid required fields" });
     }
 
-    const prompt = questionAnswerPrompt(
-      role,
-      experience,
-      topicsToFocus,
-      numberOfQuestions
-    );
+    const topics = Array.isArray(topicsToFocus)
+      ? topicsToFocus.map((t) => String(t).trim()).filter(Boolean)
+      : String(topicsToFocus).split(",").map((t) => t.trim()).filter(Boolean);
+
+  const prompt = questionAnswerPrompt(role, experience, topics, numQ);
 
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash-lite",

@@ -93,15 +93,19 @@ const InterviewPrep = () => {
             topicsToFocus: sessionData.topicsToFocus,
             numberOfQuestions: 1,
         });
-        const newQuestions = aiRes.data.questions;
-        const saveRes = await axiosInstance.post(API_PATHS.QUESTION.ADD_TO_SESSION, {
-            sessionId,
-            questions: newQuestions,
-        });
-        setSessionData((prev) => ({
-            ...prev,
-            questions: [...prev.questions, ...saveRes.data],
-        }));
+    let newQuestions = aiRes.data.questions;
+    if (!Array.isArray(newQuestions)) {
+      newQuestions = [newQuestions];
+    }
+    const saveRes = await axiosInstance.post(API_PATHS.QUESTION.ADD_TO_SESSION, {
+      sessionId,
+      questions: newQuestions,
+    });
+    const created = Array.isArray(saveRes.data) ? saveRes.data : [saveRes.data];
+    setSessionData((prev) => ({
+      ...prev,
+      questions: [...(prev.questions || []), ...created],
+    }));
         toast.success("New question added!", { id: toastId });
     } catch (err) {
         toast.error("Failed to add question.", { id: toastId });
